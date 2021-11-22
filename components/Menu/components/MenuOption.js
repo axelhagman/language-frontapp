@@ -16,9 +16,9 @@ const Container = styled.div`
   }
 `;
 
-const MenuOption = ({ title }) => {
+const MenuOption = ({ title, onClick }) => {
   return (
-    <Container>
+    <Container onClick={onClick}>
       <h3>{title}</h3>
     </Container>
   );

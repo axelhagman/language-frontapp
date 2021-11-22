@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import Link from 'next/link';
+import { useAuth } from 'context/auth';
 
 import getColor from 'theme/getColor';
 import getShadow from 'theme/getShadow';
@@ -52,6 +54,7 @@ const Divider = styled.div`
 `;
 
 const Menu = () => {
+  const { user, login, logout } = useAuth();
   return (
     <Container>
       <HeaderBlock>
@@ -59,13 +62,21 @@ const Menu = () => {
       </HeaderBlock>
       <MainOptions>
         <MenuOption title='Overview' />
-        <MenuOption title='Courses' />
+        <Link href='/practice'>
+          <a style={{ width: '100%' }}>
+            <MenuOption title='Practice' />
+          </a>
+        </Link>
         <MenuOption title='Schedule' />
         <MenuOption title='Exams' />
         <MenuOption title='Settings' />
       </MainOptions>
       <BottomContent>
-        <MenuOption title='Log out' />
+        {user ? (
+          <MenuOption onClick={logout} title='Log out' />
+        ) : (
+          <MenuOption onClick={login} title='Log In' />
+        )}
         <Divider />
         <BottomCard />
       </BottomContent>

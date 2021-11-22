@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import { useAuth } from 'context/auth';
 import getShadow from 'theme/getShadow';
 
 const Container = styled.div`
@@ -45,13 +46,15 @@ const Profile = styled.div`
 `;
 
 const TopBar = () => {
+  const { user } = useAuth();
   return (
     <Container>
       <SearchBar />
       <RightBlock>
         <Notifications />
         <Divider />
-        <Profile />
+        {user && <h1>{user.displayName}</h1>}
+        {/* <Profile /> */}
       </RightBlock>
     </Container>
   );
