@@ -5,6 +5,8 @@ import getColor from 'theme/getColor';
 
 import InputField from './inputField';
 
+const Container = styled.div``;
+
 const InfoBlock = styled.div`
   display: flex;
   flex-direction: column;
@@ -41,71 +43,87 @@ const NextButton = styled.div`
   width: 100%;
 `;
 
-const Divider = styled.div`
-  min-height: 0.5rem;
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  margin-top: 1rem;
 `;
 
-const Basics = ({ onNext, initialData }) => {
-  const [data, setData] = useState(initialData);
+const Divider = styled.div`
+  min-width: 1rem;
+`;
+
+const AddWord = ({ onBack, addToWords, onNext }) => {
+  const [currWord, setCurrWord] = useState({
+    word: '',
+    translation: '',
+    description: '',
+  });
 
   const handleChange = (evt) => {
-    setData({ ...data, [evt.target.name]: evt.target.value });
+    setCurrWord({ ...currWord, [evt.target.name]: evt.target.value });
   };
+
+  console.log(currWord);
 
   return (
     <>
       <InfoBlock>
         <Header>
-          <h2>Basic Info</h2>
+          <h2>Content</h2>
         </Header>
         <InputBlock>
           <InputTitle>
-            <h3>Title</h3>
+            <h3>Word</h3>
           </InputTitle>
           <InputField
-            placeholder='Title'
-            name='title'
+            placeholder='Word'
+            name='word'
             onInput={handleChange}
-            value={data.title}
+            value={currWord.word}
           />
         </InputBlock>
         <InputBlock>
           <InputTitle>
-            <h3>Languages</h3>
+            <h3>Translation</h3>
           </InputTitle>
           <InputField
-            placeholder='Language'
-            name='language01'
+            placeholder='Translation'
+            name='translation'
             onInput={handleChange}
-            value={data.language01}
-          />
-          <Divider />
-          <InputField
-            placeholder='Language'
-            name='language02'
-            onInput={handleChange}
-            value={data.language02}
+            value={currWord.translation}
           />
         </InputBlock>
         <InputBlock>
           <InputTitle>
-            <h3>Description (optional)</h3>
+            <h3>Description</h3>
           </InputTitle>
           <InputField
             placeholder='Description'
             name='description'
             onInput={handleChange}
-            value={data.description}
+            value={currWord.description}
           />
         </InputBlock>
       </InfoBlock>
-      <NextStepContainer onClick={() => onNext(data)}>
-        <NextButton>
-          <h2>Next</h2>
+      <NextStepContainer>
+        <NextButton onClick={() => addToWords(currWord)}>
+          <h2>Add</h2>
         </NextButton>
       </NextStepContainer>
+      <ButtonContainer>
+        <NextButton onClick={onBack}>
+          <h2>Back</h2>
+        </NextButton>
+        <Divider />
+        <NextButton onClick={onNext}>
+          <h2>Next</h2>
+        </NextButton>
+      </ButtonContainer>
     </>
   );
 };
 
-export default Basics;
+export default AddWord;

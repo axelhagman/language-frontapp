@@ -1,9 +1,14 @@
 import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
+import { doc, addDoc, collection, setDoc } from 'firebase/firestore';
 import Link from 'next/link';
 import getColor from 'theme/getColor';
+import { useAuth } from 'context/auth';
 
-import Basics from './components/basicInfo';
+import Basics from './components/BasicInfo';
+import AddWord from './components/AddWord';
+import SetInfo from './components/SetInfo';
+import { firestore } from 'utils/firebase/clientApp';
 
 const Container = styled.div`
   padding: 2rem;
@@ -59,89 +64,91 @@ const Divider = styled.div`
 
 const Create = () => {
   const [view, setView] = useState('basics');
+  const [basicsData, setBasicsData] = useState({
+    title: '',
+    language01: '',
+    language02: '',
+    description: '',
+  });
+  const [wordsData, setWordsData] = useState([]);
+
+  const { user } = useAuth();
+
+  const handleAddToWords = (newWord) => {
+    setWordsData([...wordsData, newWord]);
+  };
+  console.log(user);
+
+  const handleSubmit = useCallback(async () => {
+    if (user) {
+      const docData = {
+        ...basicsData,
+        wordsData: [...wordsData],
+        author: {
+          uid: user.uid,
+          fullName: user.displayName,
+        },
+      };
+
+      await addDoc(collection(firestore, 'basicCards'), docData)
+        .then(() => {
+          setView('success');
+        })
+        .catch((e) => console.error(e));
+    }
+  }, [user, wordsData, basicsData]);
+
+  console.log(wordsData);
 
   const getContent = useCallback(() => {
     switch (view) {
       case 'basics':
-        return <Basics />;
+        return (
+          <Basics
+            onNext={(data) => {
+              setBasicsData(data);
+              setView('content');
+            }}
+            initialData={basicsData}
+          />
+        );
       case 'content':
         return (
           <>
-            <InfoBlock>
-              <Header>
-                <h2>Content</h2>
-              </Header>
-              <InputBlock>
-                <InputTitle>
-                  <h3>Word</h3>
-                </InputTitle>
-                <input placeholder='Word' />
-              </InputBlock>
-              <InputBlock>
-                <InputTitle>
-                  <h3>Translation</h3>
-                </InputTitle>
-                <input placeholder='Translation' />
-              </InputBlock>
-              <InputBlock>
-                <InputTitle>
-                  <h3>Description</h3>
-                </InputTitle>
-                <input placeholder='Description' />
-              </InputBlock>
-            </InfoBlock>
-            <NextStepContainer>
-              <NextButton>
-                <h2>Add</h2>
-              </NextButton>
-            </NextStepContainer>
-            <ButtonContainer>
-              <NextButton onClick={() => setView('basics')}>
-                <h2>Back</h2>
-              </NextButton>
-              <Divider />
-              <NextButton>
-                <h2>Next</h2>
-              </NextButton>
-            </ButtonContainer>
+            <AddWord
+              onNext={() => {
+                setView('confirm');
+              }}
+              onBack={() => {
+                setView('basics');
+              }}
+              initialData={wordsData}
+              addToWords={(newWord) => handleAddToWords(newWord)}
+            />
+            <SetInfo wordsData={wordsData} basicsData={basicsData} />
+          </>
+        );
+      case 'confirm':
+        return (
+          <>
+            <SetInfo wordsData={wordsData} basicsData={basicsData} />
+            <NextButton onClick={() => handleSubmit()}>
+              <h2>Confirm</h2>
+            </NextButton>
           </>
         );
       default:
         return (
-          <>
-            <InfoBlock>
-              <Header>
-                <h2>Basic Info</h2>
-              </Header>
-              <InputBlock>
-                <InputTitle>
-                  <h3>Name</h3>
-                </InputTitle>
-                <input placeholder='Name' />
-              </InputBlock>
-              <InputBlock>
-                <InputTitle>
-                  <h3>Languages</h3>
-                </InputTitle>
-                <input placeholder='Language' />
-                <input placeholder='Language' />
-              </InputBlock>
-              <InputBlock>
-                <InputTitle>
-                  <h3>Description (optional)</h3>
-                </InputTitle>
-                <input placeholder='Description' />
-              </InputBlock>
-            </InfoBlock>
-            <NextStepContainer onClick={() => setView('content')}>
-              <NextButton>
-                <h2>Next</h2>
-              </NextButton>
-            </NextStepContainer>
-          </>
+          <Basics
+            onNext={(data) => {
+              setBasicsData(data);
+              setView('content');
+            }}
+            initialData={basicsData}
+          />
         );
     }
-  }, [view]);
+  }, [view, wordsData, basicsData]);
 
   return (
     <Container>
