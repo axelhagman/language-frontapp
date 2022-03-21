@@ -55,7 +55,7 @@ const Divider = styled.div`
   min-width: 1rem;
 `;
 
-const AddWord = ({ onBack, addToWords, onNext }) => {
+const AddWord = ({ onBack, addToWords, onNext, basicsData }) => {
   const [currWord, setCurrWord] = useState({
     word: '',
     translation: '',
@@ -76,7 +76,7 @@ const AddWord = ({ onBack, addToWords, onNext }) => {
         </Header>
         <InputBlock>
           <InputTitle>
-            <h3>Word</h3>
+            <h3>{basicsData.language01}</h3>
           </InputTitle>
           <InputField
             placeholder='Word'
@@ -87,7 +87,7 @@ const AddWord = ({ onBack, addToWords, onNext }) => {
         </InputBlock>
         <InputBlock>
           <InputTitle>
-            <h3>Translation</h3>
+            <h3>{basicsData.language02}</h3>
           </InputTitle>
           <InputField
             placeholder='Translation'

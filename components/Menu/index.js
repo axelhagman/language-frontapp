@@ -67,8 +67,8 @@ const Menu = () => {
             <MenuOption title='Practice' />
           </a>
         </Link>
-        <MenuOption title='Schedule' />
-        <MenuOption title='Exams' />
+        {/* <MenuOption title='Schedule' />
+        <MenuOption title='Exams' /> */}
         <MenuOption title='Settings' />
       </MainOptions>
       <BottomContent>
@@ -78,7 +78,7 @@ const Menu = () => {
           <MenuOption onClick={login} title='Log In' />
         )}
         <Divider />
-        <BottomCard />
+        {/* <BottomCard /> */}
       </BottomContent>
     </Container>
   );

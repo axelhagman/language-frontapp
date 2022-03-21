@@ -9,6 +9,7 @@ import Basics from './components/BasicInfo';
 import AddWord from './components/AddWord';
 import SetInfo from './components/SetInfo';
 import { firestore } from 'utils/firebase/clientApp';
+import axios from 'axios';
 
 const Container = styled.div`
   padding: 2rem;
@@ -86,15 +87,19 @@ const Create = () => {
         wordsData: [...wordsData],
         author: {
           uid: user.uid,
-          fullName: user.displayName,
+          displayName: user.displayName,
         },
       };
 
-      await addDoc(collection(firestore, 'basicCards'), docData)
-        .then(() => {
-          setView('success');
-        })
-        .catch((e) => console.error(e));
+      console.log({ ...docData });
+
+      await axios.post('/api/cards', { ...docData });
+
+      // await addDoc(collection(firestore, 'basicCards'), docData)
+      //   .then(() => {
+      //     setView('success');
+      //   })
+      //   .catch((e) => console.error(e));
     }
   }, [user, wordsData, basicsData]);
 
@@ -123,6 +128,7 @@ const Create = () => {
                 setView('basics');
               }}
               initialData={wordsData}
+              basicsData={basicsData}
               addToWords={(newWord) => handleAddToWords(newWord)}
             />
             <SetInfo wordsData={wordsData} basicsData={basicsData} />
@@ -135,6 +141,12 @@ const Create = () => {
             <NextButton onClick={() => handleSubmit()}>
               <h2>Confirm</h2>
             </NextButton>
+          </>
+        );
+      case 'success':
+        return (
+          <>
+            <h2>Success</h2>
           </>
         );
       default:
