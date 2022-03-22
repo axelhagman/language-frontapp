@@ -11,14 +11,19 @@ const Container = styled.div`
   border-radius: 1rem;
   transition: all ease 0.25s;
   width: 100%;
-  &:hover {
-    background-color: ${getColor({ color: 'primary', opacity: 0.36 })};
-  }
+  background-color: ${({ active }) =>
+    active ? getColor({ color: 'primary', opacity: 0.36 }) : 'transparent'};
+  ${({ active }) =>
+    active
+      ? ''
+      : `&:hover {
+    background-color: ${getColor({ color: 'primary', opacity: 0.24 })};
+  }`}
 `;
 
-const MenuOption = ({ title, onClick }) => {
+const MenuOption = ({ title, onClick, active }) => {
   return (
-    <Container onClick={onClick}>
+    <Container onClick={onClick} active={active}>
       <h3>{title}</h3>
     </Container>
   );

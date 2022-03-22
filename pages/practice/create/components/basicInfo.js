@@ -1,9 +1,10 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import getColor from 'theme/getColor';
+import Button from 'components/Button';
 
-import InputField from './inputField';
+import InputField from './InputField';
 
 const InfoBlock = styled.div`
   display: flex;
@@ -31,16 +32,6 @@ const NextStepContainer = styled.div`
   margin-top: 1rem;
 `;
 
-const NextButton = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-  background-color: ${getColor({ color: 'primary' })};
-  width: 100%;
-`;
-
 const Divider = styled.div`
   min-height: 0.5rem;
 `;
@@ -66,7 +57,7 @@ const Basics = ({ onNext, initialData }) => {
             placeholder='Title'
             name='title'
             onInput={handleChange}
-            value={data.title}
+            customValue={data.title}
           />
         </InputBlock>
         <InputBlock>
@@ -77,14 +68,14 @@ const Basics = ({ onNext, initialData }) => {
             placeholder='Language'
             name='language01'
             onInput={handleChange}
-            value={data.language01}
+            customValue={data.language01}
           />
           <Divider />
           <InputField
             placeholder='Language'
             name='language02'
             onInput={handleChange}
-            value={data.language02}
+            customValue={data.language02}
           />
         </InputBlock>
         <InputBlock>
@@ -95,14 +86,12 @@ const Basics = ({ onNext, initialData }) => {
             placeholder='Description'
             name='description'
             onInput={handleChange}
-            value={data.description}
+            customValue={data.description}
           />
         </InputBlock>
       </InfoBlock>
       <NextStepContainer onClick={() => onNext(data)}>
-        <NextButton>
-          <h2>Next</h2>
-        </NextButton>
+        <Button fullWidth>Next</Button>
       </NextStepContainer>
     </>
   );

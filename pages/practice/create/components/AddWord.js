@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import getColor from 'theme/getColor';
 
-import InputField from './inputField';
+import InputField from './InputField';
 
 const Container = styled.div``;
 
@@ -82,7 +82,7 @@ const AddWord = ({ onBack, addToWords, onNext, basicsData }) => {
             placeholder='Word'
             name='word'
             onInput={handleChange}
-            value={currWord.word}
+            customValue={currWord.word}
           />
         </InputBlock>
         <InputBlock>
@@ -93,7 +93,7 @@ const AddWord = ({ onBack, addToWords, onNext, basicsData }) => {
             placeholder='Translation'
             name='translation'
             onInput={handleChange}
-            value={currWord.translation}
+            customValue={currWord.translation}
           />
         </InputBlock>
         <InputBlock>
@@ -104,7 +104,7 @@ const AddWord = ({ onBack, addToWords, onNext, basicsData }) => {
             placeholder='Description'
             name='description'
             onInput={handleChange}
-            value={currWord.description}
+            customValue={currWord.description}
           />
         </InputBlock>
       </InfoBlock>

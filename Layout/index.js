@@ -6,12 +6,14 @@ import TopBar from 'components/TopBar';
 
 const AppContainer = styled.div`
   display: flex;
+  background-color: #f2f1f8;
 `;
 
 const ContentWrapper = styled.div`
   width: 100%;
-  background-color: white;
+  background-color: #f2f1f8;
   height: 200vh;
+  padding: 2rem;
 `;
 
 const Layout = ({ children }) => {

@@ -9,7 +9,7 @@ const Container = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 2rem;
+  padding-bottom: 2rem;
 `;
 
 const SearchBar = styled.div`

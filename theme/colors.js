@@ -1,7 +1,8 @@
 export const hslColors = {
-  primary: 'hsl(115, 46%, 60%)',
+  // #FFA245
+  primary: 'hsl(30, 100%, 64%)',
 
-  primary02: 'hsl(115, 61%, 75%)',
+  primary02: 'hsl(30, 100%, 42%)',
 
   base: 'hsl(52, 94%, 94%)',
 
@@ -12,6 +13,11 @@ export const hslColors = {
   red: 'hsl(354, 60%, 60%)',
 
   jet: 'hsl(360, 2%, 24%)',
+
+  // #2D2D39
+  dark: 'hsl(240, 12%, 20%)',
+  // #3F3F50
+  dark02: 'hsl(240, 12%, 28%)',
 
   // #F6DD79
   notificationWarning: 'hsl(48, 87%, 72%)',

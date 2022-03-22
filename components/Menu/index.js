@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
 import { useAuth } from 'context/auth';
+import { useRouter } from 'next/router';
 
 import getColor from 'theme/getColor';
 import getShadow from 'theme/getShadow';
@@ -32,6 +33,7 @@ const MainOptions = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
+  position: relative;
 `;
 
 const BottomContent = styled.div`
@@ -49,28 +51,69 @@ const BottomCard = styled.div`
   ${getShadow({ size: 'MD' })}
 `;
 
+const IndicatorContainer = styled.div`
+  position: absolute;
+  height: 100%;
+  width: 0.125rem;
+  left: 0;
+`;
+
+const OptionIndicator = styled.div`
+  width: 0.25rem;
+  height: 2.5rem;
+  left: 0;
+  position: absolute;
+  background-color: ${getColor({ color: 'primary' })};
+  transition: all ease 0.25s;
+  top: ${({ activeMenuIndex }) =>
+    activeMenuIndex
+      ? `calc((100% / 6) * ${activeMenuIndex * 2 + 1} - 1.25rem)`
+      : 'calc(100% / 6 - 1.25rem)'};
+`;
+
 const Divider = styled.div`
   min-height: 1rem;
 `;
 
 const Menu = () => {
   const { user, login, logout } = useAuth();
+  const [activeMenuIndex, setActiveMenuIndex] = useState(null);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if (router.pathname.startsWith('/practice')) {
+      setActiveMenuIndex(1);
+    } else {
+      setActiveMenuIndex(0);
+    }
+  }, [router.pathname]);
+
   return (
     <Container>
       <HeaderBlock>
         <h1>Lingu</h1>
       </HeaderBlock>
       <MainOptions>
-        <MenuOption title='Overview' />
-        <Link href='/practice'>
+        <Link href='/'>
           <a style={{ width: '100%' }}>
-            <MenuOption title='Practice' />
+            <MenuOption title='Overview' active={activeMenuIndex === 0} />
           </a>
         </Link>
-        {/* <MenuOption title='Schedule' />
-        <MenuOption title='Exams' /> */}
+
+        <Link href='/practice'>
+          <a style={{ width: '100%' }}>
+            <MenuOption title='Practice' active={activeMenuIndex === 1} />
+          </a>
+        </Link>
+        <MenuOption title='Schedule' />
+        <MenuOption title='Courses' />
         <MenuOption title='Settings' />
+        {/* <IndicatorContainer>
+          <OptionIndicator activeMenuIndex={activeMenuIndex} />
+        </IndicatorContainer> */}
       </MainOptions>
+
       <BottomContent>
         {user ? (
           <MenuOption onClick={logout} title='Log out' />

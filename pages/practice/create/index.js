@@ -1,15 +1,13 @@
 import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
-import { doc, addDoc, collection, setDoc } from 'firebase/firestore';
-import Link from 'next/link';
+import axios from 'axios';
+
 import getColor from 'theme/getColor';
 import { useAuth } from 'context/auth';
 
 import Basics from './components/BasicInfo';
 import AddWord from './components/AddWord';
 import SetInfo from './components/SetInfo';
-import { firestore } from 'utils/firebase/clientApp';
-import axios from 'axios';
 
 const Container = styled.div`
   padding: 2rem;
@@ -78,7 +76,6 @@ const Create = () => {
   const handleAddToWords = (newWord) => {
     setWordsData([...wordsData, newWord]);
   };
-  console.log(user);
 
   const handleSubmit = useCallback(async () => {
     if (user) {
@@ -91,19 +88,9 @@ const Create = () => {
         },
       };
 
-      console.log({ ...docData });
-
       await axios.post('/api/cards', { ...docData });
-
-      // await addDoc(collection(firestore, 'basicCards'), docData)
-      //   .then(() => {
-      //     setView('success');
-      //   })
-      //   .catch((e) => console.error(e));
     }
   }, [user, wordsData, basicsData]);
-
-  console.log(wordsData);
 
   const getContent = useCallback(() => {
     switch (view) {
