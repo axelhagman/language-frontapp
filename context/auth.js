@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, createContext, useContext } from 'react';
 import { app, firestore } from 'utils/firebase/clientApp';
 import { doc, setDoc } from 'firebase/firestore';
 import {
@@ -8,8 +8,6 @@ import {
   signOut,
   onAuthStateChanged,
 } from 'firebase/auth';
-
-const { createContext, useContext } = require('react');
 
 const auth = getAuth(app);
 
