@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
 
 import getColor from 'theme/getColor';
+import Button from 'components/Button';
 
 import InputField from './InputField';
 
@@ -33,16 +34,6 @@ const NextStepContainer = styled.div`
   margin-top: 1rem;
 `;
 
-const NextButton = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-  background-color: ${getColor({ color: 'primary' })};
-  width: 100%;
-`;
-
 const ButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -66,13 +57,11 @@ const AddWord = ({ onBack, addToWords, onNext, basicsData }) => {
     setCurrWord({ ...currWord, [evt.target.name]: evt.target.value });
   };
 
-  console.log(currWord);
-
   return (
     <>
       <InfoBlock>
         <Header>
-          <h2>Content</h2>
+          <h2>Add new word</h2>
         </Header>
         <InputBlock>
           <InputTitle>
@@ -98,7 +87,7 @@ const AddWord = ({ onBack, addToWords, onNext, basicsData }) => {
         </InputBlock>
         <InputBlock>
           <InputTitle>
-            <h3>Description</h3>
+            <h3>Description (optional)</h3>
           </InputTitle>
           <InputField
             placeholder='Description'
@@ -109,18 +98,28 @@ const AddWord = ({ onBack, addToWords, onNext, basicsData }) => {
         </InputBlock>
       </InfoBlock>
       <NextStepContainer>
-        <NextButton onClick={() => addToWords(currWord)}>
-          <h2>Add</h2>
-        </NextButton>
+        <Button
+          fullWidth
+          onClick={() => {
+            addToWords(currWord);
+            setCurrWord({
+              word: '',
+              translation: '',
+              description: '',
+            });
+          }}
+        >
+          Add
+        </Button>
       </NextStepContainer>
       <ButtonContainer>
-        <NextButton onClick={onBack}>
-          <h2>Back</h2>
-        </NextButton>
+        <Button fullWidth onClick={onBack}>
+          Back
+        </Button>
         <Divider />
-        <NextButton onClick={onNext}>
-          <h2>Next</h2>
-        </NextButton>
+        <Button fullWidth onClick={onNext}>
+          Next
+        </Button>
       </ButtonContainer>
     </>
   );

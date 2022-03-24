@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import getColor from 'theme/getColor';
 
+import Button from 'components/Button';
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -107,7 +109,7 @@ const SetInfo = ({ wordsData, basicsData }) => {
                 <h3>{word.translation}</h3>
               </WordContainer>
               <ButtonsContainer>
-                <Removebutton />
+                <Button colorOverride='notificationError'>Remove</Button>
               </ButtonsContainer>
             </WordRow>
           );
