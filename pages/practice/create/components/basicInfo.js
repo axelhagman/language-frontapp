@@ -43,6 +43,10 @@ const Basics = ({ onNext, initialData }) => {
     setData({ ...data, [evt.target.name]: evt.target.value });
   };
 
+  if (!data) {
+    return null;
+  }
+
   return (
     <>
       <InfoBlock>

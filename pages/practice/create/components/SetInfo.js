@@ -79,6 +79,9 @@ const Removebutton = styled.div`
 `;
 
 const SetInfo = ({ wordsData, basicsData }) => {
+  if (!wordsData || !basicsData) {
+    return null;
+  }
   return (
     <Container>
       <HeaderBlock>

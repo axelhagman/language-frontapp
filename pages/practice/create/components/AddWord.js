@@ -57,6 +57,10 @@ const AddWord = ({ onBack, addToWords, onNext, basicsData }) => {
     setCurrWord({ ...currWord, [evt.target.name]: evt.target.value });
   };
 
+  if (!basicsData) {
+    return null;
+  }
+
   return (
     <>
       <InfoBlock>
