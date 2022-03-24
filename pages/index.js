@@ -5,8 +5,12 @@ const AppContainer = styled.div`
   display: flex;
 `;
 
-const App = () => {
-  return <AppContainer></AppContainer>;
+const Overview = () => {
+  return (
+    <AppContainer>
+      <h1>Overview</h1>
+    </AppContainer>
+  );
 };
 
-export default App;
+export default Overview;
