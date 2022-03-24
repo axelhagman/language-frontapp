@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
-import { useAuth } from 'context/auth';
+import { useAuthContext } from 'context/auth';
 import { useRouter } from 'next/router';
 
 import getColor from 'theme/getColor';
@@ -76,7 +76,7 @@ const Divider = styled.div`
 `;
 
 const Menu = () => {
-  const { user, login, logout } = useAuth();
+  const { user, login, logout } = useAuthContext();
   const [activeMenuIndex, setActiveMenuIndex] = useState(null);
 
   const router = useRouter();

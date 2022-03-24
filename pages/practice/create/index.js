@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 
 import getColor from 'theme/getColor';
-import { useAuth } from 'context/auth';
+import { useAuthContext } from 'context/auth';
 
 import Basics from './components/BasicInfoView';
 import AddWord from './components/AddWord';
@@ -71,7 +71,7 @@ const Create = () => {
   });
   const [wordsData, setWordsData] = useState([]);
 
-  const { user } = useAuth();
+  const { user } = useAuthContext();
 
   const handleAddToWords = (newWord) => {
     setWordsData([...wordsData, newWord]);

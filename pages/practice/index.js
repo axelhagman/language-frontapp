@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Link from 'next/link';
 import axios from 'axios';
 
-import { useAuth } from 'context/auth';
+import { useAuthContext } from 'context/auth';
 import PracticeCard from 'components/PracticeCard';
 import Button from 'components/Button';
 
@@ -21,7 +21,7 @@ const Divider = styled.div`
 
 const PracticeLanding = () => {
   const [data, setData] = useState(null);
-  const { user } = useAuth();
+  const { user } = useAuthContext();
 
   const onGet = async () => {
     await axios

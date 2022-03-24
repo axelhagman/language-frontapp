@@ -19,7 +19,7 @@ const AuthContext = createContext({
   logout: () => {},
 });
 
-const AuthProvider = ({ children }) => {
+export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -61,8 +61,11 @@ const AuthProvider = ({ children }) => {
       {children}
     </AuthContext.Provider>
   );
-};
+}
 
-const useAuth = () => useContext(AuthContext);
-
-export { AuthProvider, useAuth };
+export function useAuthContext() {
+  const state = useContext(AuthContext);
+  if (state !== undefined) {
+    return state;
+  }
+}

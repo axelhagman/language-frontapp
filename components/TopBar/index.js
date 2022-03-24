@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { useAuth } from 'context/auth';
+import { useAuthContext } from 'context/auth';
 import getShadow from 'theme/getShadow';
 
 const Container = styled.div`
@@ -46,7 +46,7 @@ const Profile = styled.div`
 `;
 
 const TopBar = () => {
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   return (
     <Container>
       <SearchBar />
