@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import { AuthProvider } from 'context/auth';
 import Menu from 'components/Menu';
 import TopBar from 'components/TopBar';
 
@@ -18,13 +19,15 @@ const ContentWrapper = styled.div`
 
 const Layout = ({ children }) => {
   return (
-    <AppContainer>
-      <Menu />
-      <ContentWrapper>
-        <TopBar />
-        {children}
-      </ContentWrapper>
-    </AppContainer>
+    <AuthProvider>
+      <AppContainer>
+        <Menu />
+        <ContentWrapper>
+          <TopBar />
+          {children}
+        </ContentWrapper>
+      </AppContainer>
+    </AuthProvider>
   );
 };
 
