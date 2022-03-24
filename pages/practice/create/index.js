@@ -5,9 +5,9 @@ import axios from 'axios';
 import getColor from 'theme/getColor';
 import { useAuthContext } from 'utils/auth';
 
-import Basics from './components/BasicInfoView';
-import AddWord from './components/AddWord';
-import SetInfo from './components/SetInfo';
+import Basics from 'components/Create/BasicInfoView';
+import AddWord from 'components/Create/AddWord';
+import SetInfo from 'components/Create/SetInfo';
 
 const Container = styled.div`
   padding: 2rem;

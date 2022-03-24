@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 import Link from 'next/link';
 
-import InputField from 'pages/practice/create/components/InputField';
+import InputField from 'components/Create/InputField';
 import Button from 'components/Button';
 import { distanceProm } from 'utils/DL';
 import getColor from 'theme/getColor';
