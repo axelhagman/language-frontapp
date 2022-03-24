@@ -5,7 +5,7 @@ import axios from 'axios';
 import getColor from 'theme/getColor';
 import { useAuth } from 'context/auth';
 
-import Basics from './components/BasicInfo';
+import Basics from './components/BasicInfoView';
 import AddWord from './components/AddWord';
 import SetInfo from './components/SetInfo';
 
