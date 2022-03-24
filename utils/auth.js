@@ -9,12 +9,12 @@ import {
   onAuthStateChanged,
 } from 'firebase/auth';
 
-const auth = getAuth(app);
-
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
+
+  const auth = getAuth(app);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -25,7 +25,7 @@ export function AuthProvider({ children }) {
       }
     });
     return unsubscribe;
-  }, []);
+  }, [auth]);
 
   const login = async () => {
     try {
