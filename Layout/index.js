@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { AuthProvider } from 'context/auth';
+import { AuthProvider } from 'utils/auth';
 import Menu from 'components/Menu';
 import TopBar from 'components/TopBar';
 

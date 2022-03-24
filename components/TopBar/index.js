@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { useAuthContext } from 'context/auth';
+import { useAuthContext } from 'utils/auth';
 import getShadow from 'theme/getShadow';
 
 const Container = styled.div`

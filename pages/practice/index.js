@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Link from 'next/link';
 import axios from 'axios';
 
-import { useAuthContext } from 'context/auth';
+import { useAuthContext } from 'utils/auth';
 import PracticeCard from 'components/PracticeCard';
 import Button from 'components/Button';
 

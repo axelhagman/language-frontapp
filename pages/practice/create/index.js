@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 
 import getColor from 'theme/getColor';
-import { useAuthContext } from 'context/auth';
+import { useAuthContext } from 'utils/auth';
 
 import Basics from './components/BasicInfoView';
 import AddWord from './components/AddWord';

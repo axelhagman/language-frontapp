@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
-import { useAuthContext } from 'context/auth';
+import { useAuthContext } from 'utils/auth';
 import { useRouter } from 'next/router';
 
 import getColor from 'theme/getColor';
