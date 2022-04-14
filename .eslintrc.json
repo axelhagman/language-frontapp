@@ -1,3 +1,25 @@
 {
   "extends": "next/core-web-vitals"
+  // "settings": {
+  //   "import/resolver": {
+  //     "alias": { 
+  //       "map": [
+  //         ["firebase", "./firebase"],
+  //         ["components", "./components"],
+  //         ["context", "./context"],
+  //         ["pages", "./pages"],
+  //         ["public", "./public"],
+  //         ["styles", "./styles"],
+  //         ["utils", ["./utils"]],
+  //         ["icons", ["./icons"]],
+  //         ["routes", ["./routes"]],
+  //         ["hooks", ["./hooks"]],
+  //         ["@apolloClient", ["./apolloClient"]],
+  //         ["state", ["./state"]],
+  //         ["scripts", ["./scripts"]]
+          
+  //       ]
+  //     }
+  //   }
+  // }
 }

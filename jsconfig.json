@@ -1,5 +1,8 @@
 {
     "compilerOptions": {
+      "jsx": "react",
+      "module": "commonjs",
+      "target": "es6",
       "baseUrl": "./",
       "paths": {
         "@theme/*": ["src/theme/*"],
