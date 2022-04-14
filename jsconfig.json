@@ -5,10 +5,10 @@
       "target": "es6",
       "baseUrl": "./",
       "paths": {
-        "theme/*": ["src/theme/*"],
-        "pages/*": ["src/pages/*"],
-        "layout/*": ["src/layout/*"],
-        "components/*": ["src/components/*"]
+        "@theme/*": ["src/theme/*"],
+        "@pages/*": ["src/pages/*"],
+        "@layout/*": ["src/layout/*"],
+        "@components/*": ["src/components/*"]
       }
     }
   }
