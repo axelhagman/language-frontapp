@@ -15,13 +15,6 @@ const Overview = () => {
     interval: 1.3,
   });
 
-  useEffect(() => {
-    setDataState({ ...SM2({ ...dataState }), grade: 3 });
-    setDataState({ ...SM2({ ...dataState }), grade: 4 });
-  }, []);
-
-  console.log(dataState);
-
   return (
     <AppContainer>
       <h1>Overview</h1>

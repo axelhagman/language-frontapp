@@ -3,12 +3,12 @@
       "jsx": "react",
       "module": "commonjs",
       "target": "es6",
-      "baseUrl": ".",
+      "baseUrl": "./",
       "paths": {
-        "@theme/*": ["src/theme/*"],
-        "@pages/*": ["src/pages/*"],
-        "@layout/*": ["src/layout/*"],
-        "@components/*": ["src/components/*"]
+        "@theme/*": ["theme/*"],
+        "@pages/*": ["pages/*"],
+        "@layout/*": ["layout/*"],
+        "@components/*": ["components/*"]
       }
     }
   }
