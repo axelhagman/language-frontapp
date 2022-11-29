@@ -10,24 +10,24 @@ const StyledButton = styled.button`
   align-items: center;
   padding: 0.75rem 1.25rem;
   margin: 0;
-  background-color: ${({ colorOverride }) =>
+  background-color: ${({ colorOverride, fullOpacity }) =>
     colorOverride
-      ? getColor({ color: colorOverride, opacity: 0.36 })
+      ? getColor({ color: colorOverride, opacity: fullOpacity ? 0.36 : 0.72 })
       : getColor({
           color: 'primary',
-          opacity: 0.36,
+          opacity: fullOpacity ? 0.36 : 0.72,
         })};
   border-radius: 1rem;
   border: 0;
   cursor: pointer;
   transition: all ease 0.25s;
   &:hover {
-    background-color: ${({ colorOverride }) =>
+    background-color: ${({ colorOverride, fullOpacity }) =>
       colorOverride
-        ? getColor({ color: colorOverride, opacity: 0.52 })
+        ? getColor({ color: colorOverride, opacity: fullOpacity ? 0.52 : 1 })
         : getColor({
             color: 'primary',
-            opacity: 0.52,
+            opacity: fullOpacity ? 0.52 : 1,
           })};
   }
   > * {
@@ -44,6 +44,7 @@ const Button = ({
   onClick,
   fullWidth,
   colorOverride,
+  fullOpacity,
 }) => {
   return (
     <StyledButton
@@ -54,6 +55,7 @@ const Button = ({
       href={href}
       fullWidth={fullWidth}
       colorOverride={colorOverride}
+      fullOpacity={fullOpacity}
     >
       <p style={{ fontSize: 16, fontWeight: 'bold' }}>{children}</p>
     </StyledButton>

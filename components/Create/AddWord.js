@@ -3,10 +3,20 @@ import styled from 'styled-components';
 
 import getColor from 'theme/getColor';
 import Button from 'components/Button';
+import getShadow from 'theme/getShadow';
 
 import InputField from './InputField';
 
-const Container = styled.div``;
+const CardContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  border-radius: 1rem;
+  background-color: white;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  ${({ alignCenter }) => (alignCenter ? 'align-items: center;' : '')}
+  ${getShadow('MD')}
+`;
 
 const InfoBlock = styled.div`
   display: flex;
@@ -16,8 +26,7 @@ const InfoBlock = styled.div`
 
 const Header = styled.div`
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  flex-direction: column;
 `;
 
 const InputBlock = styled.div`
@@ -63,68 +72,78 @@ const AddWord = ({ onBack, addToWords, onNext, basicsData }) => {
 
   return (
     <>
-      <InfoBlock>
+      <CardContainer>
         <Header>
+          <h1>{basicsData.title}</h1>
           <h2>Add new word</h2>
         </Header>
-        <InputBlock>
-          <InputTitle>
-            <h3>{basicsData.language01}</h3>
-          </InputTitle>
-          <InputField
-            placeholder='Word'
-            name='word'
-            onInput={handleChange}
-            customValue={currWord.word}
-          />
-        </InputBlock>
-        <InputBlock>
-          <InputTitle>
-            <h3>{basicsData.language02}</h3>
-          </InputTitle>
-          <InputField
-            placeholder='Translation'
-            name='translation'
-            onInput={handleChange}
-            customValue={currWord.translation}
-          />
-        </InputBlock>
-        <InputBlock>
-          <InputTitle>
-            <h3>Description (optional)</h3>
-          </InputTitle>
-          <InputField
-            placeholder='Description'
-            name='description'
-            onInput={handleChange}
-            customValue={currWord.description}
-          />
-        </InputBlock>
-      </InfoBlock>
-      <NextStepContainer>
-        <Button
-          fullWidth
-          onClick={() => {
-            addToWords(currWord);
-            setCurrWord({
-              word: '',
-              translation: '',
-              description: '',
-            });
-          }}
-        >
-          Add
-        </Button>
-      </NextStepContainer>
-      <ButtonContainer>
-        <Button fullWidth onClick={onBack}>
-          Back
-        </Button>
-        <Divider />
-        <Button fullWidth onClick={onNext}>
-          Next
-        </Button>
-      </ButtonContainer>
+      </CardContainer>
+      <CardContainer>
+        <InfoBlock>
+          <InputBlock>
+            <InputTitle>
+              <h3>{basicsData.language01}</h3>
+            </InputTitle>
+            <InputField
+              placeholder='Word'
+              name='word'
+              onInput={handleChange}
+              customValue={currWord.word}
+            />
+          </InputBlock>
+          <InputBlock>
+            <InputTitle>
+              <h3>{basicsData.language02}</h3>
+            </InputTitle>
+            <InputField
+              placeholder='Translation'
+              name='translation'
+              onInput={handleChange}
+              customValue={currWord.translation}
+            />
+          </InputBlock>
+          <InputBlock>
+            <InputTitle>
+              <h3>Description (optional)</h3>
+            </InputTitle>
+            <InputField
+              placeholder='Description'
+              name='description'
+              onInput={handleChange}
+              customValue={currWord.description}
+            />
+          </InputBlock>
+        </InfoBlock>
+        <NextStepContainer>
+          <Button
+            fullWidth
+            colorOverride='notificationSuccess'
+            onClick={() => {
+              addToWords(currWord);
+              setCurrWord({
+                word: '',
+                translation: '',
+                description: '',
+              });
+            }}
+          >
+            Add
+          </Button>
+        </NextStepContainer>
+        <ButtonContainer>
+          <Button fullWidth onClick={onBack} colorOverride='notificationError'>
+            Back
+          </Button>
+          <Divider />
+          <Button
+            fullWidth
+            onClick={onNext}
+            colorOverride='notificationSuccess'
+          >
+            Next
+          </Button>
+        </ButtonContainer>
+      </CardContainer>
     </>
   );
 };

@@ -11,15 +11,17 @@ const Container = styled.div`
 const StyledInput = styled.input`
   padding: 1rem;
   border-radius: 0.5rem;
-  border: 2px solid gray;
+  border: 2px solid rgba(145, 145, 145, 0.4);
   outline: none;
-  font-size: 1rem;
+  font-size: 1.25rem;
+  text-align: center;
+  autocomplete: off;
   &:focus {
-    border: 2px solid ${getColor({ color: 'primary' })};
+    border: 2px solid rgba(145, 145, 145, 1);
   }
 `;
 
-const InputField = ({ onInput, customValue, name, placeholder }) => {
+const InputField = ({ onInput, customValue, name, placeholder, onKeyDown }) => {
   return (
     <Container>
       <StyledInput
@@ -28,6 +30,7 @@ const InputField = ({ onInput, customValue, name, placeholder }) => {
         name={name}
         autoComplete='off'
         placeholder={placeholder}
+        onKeyDown={onKeyDown}
       />
     </Container>
   );

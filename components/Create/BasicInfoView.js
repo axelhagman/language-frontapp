@@ -3,19 +3,24 @@ import styled from 'styled-components';
 
 import getColor from 'theme/getColor';
 import Button from 'components/Button';
+import getShadow from 'theme/getShadow';
 
 import InputField from './InputField';
 
-const InfoBlock = styled.div`
+const CardContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  border-radius: 1rem;
+  background-color: white;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  ${({ alignCenter }) => (alignCenter ? 'align-items: center;' : '')}
+  ${getShadow('MD')}
 `;
 
 const Header = styled.div`
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  flex-direction: column;
 `;
 
 const InputBlock = styled.div`
@@ -49,10 +54,13 @@ const Basics = ({ onNext, initialData }) => {
 
   return (
     <>
-      <InfoBlock>
+      <CardContainer>
         <Header>
+          <h1>Create New</h1>
           <h2>Basic Info</h2>
         </Header>
+      </CardContainer>
+      <CardContainer>
         <InputBlock>
           <InputTitle>
             <h3>Title</h3>
@@ -62,6 +70,17 @@ const Basics = ({ onNext, initialData }) => {
             name='title'
             onInput={handleChange}
             customValue={data.title}
+          />
+        </InputBlock>
+        <InputBlock>
+          <InputTitle>
+            <h3>Block Title</h3>
+          </InputTitle>
+          <InputField
+            placeholder='Block Title'
+            name='blockTitle'
+            onInput={handleChange}
+            customValue={data.blockTitle}
           />
         </InputBlock>
         <InputBlock>
@@ -93,10 +112,12 @@ const Basics = ({ onNext, initialData }) => {
             customValue={data.description}
           />
         </InputBlock>
-      </InfoBlock>
-      <NextStepContainer onClick={() => onNext(data)}>
-        <Button fullWidth>Next</Button>
-      </NextStepContainer>
+        <NextStepContainer onClick={() => onNext(data)}>
+          <Button fullWidth colorOverride='notificationSuccess'>
+            Next
+          </Button>
+        </NextStepContainer>
+      </CardContainer>
     </>
   );
 };

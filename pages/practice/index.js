@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useReducer, useState } from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
 import axios from 'axios';
 
 import { useAuthContext } from 'utils/auth';
-import PracticeCard from 'components/PracticeCard';
+import GroupCard from 'components/GroupCard';
 import Button from 'components/Button';
 import SetCard from 'components/SetCard';
 
@@ -35,6 +35,7 @@ const MOCK_SETS = [
 
 const PracticeLanding = () => {
   const [data, setData] = useState(null);
+  const [activeDecksData, setActiveDecksData] = useState(null);
   const { user } = useAuthContext();
 
   const onGet = async () => {
@@ -42,6 +43,14 @@ const PracticeLanding = () => {
       .get('/api/cards', { params: { userUid: user.uid } })
       .then((res) => setData(res.data));
   };
+
+  const onGetActive = async () => {
+    await axios
+      .get('/api/activeDecks', { params: { userUid: user.uid } })
+      .then((res) => setActiveDecksData(res.data));
+  };
+
+  console.log(activeDecksData);
 
   return (
     <Container>
@@ -52,32 +61,48 @@ const PracticeLanding = () => {
         </a>
       </Link>
       <Button onClick={onGet}>Test Get</Button>
+      <Button onClick={onGetActive}>Test Get Active Decks</Button>
       <PracticeGrid>
-        {MOCK_SETS.map((mockSetData) => (
-          <SetCard
-            key={`${mockSetData.title}`}
-            title={mockSetData.title}
-            numSets={mockSetData.numSets}
-            numWords={mockSetData.numWords}
-          />
-        ))}
+        {activeDecksData?.activeDecks &&
+          Object.keys(activeDecksData.activeDecks).length > 0 &&
+          Object.keys(activeDecksData.activeDecks).map((deckId, index) => {
+            const { basicDeckData, userDeckData } =
+              activeDecksData.activeDecks[deckId];
+            console.log('Axel: ', basicDeckData, userDeckData);
+            return (
+              <Link href={`/practice/${deckId}`} key={`${deckId}`}>
+                <a>
+                  <SetCard
+                    title={basicDeckData.title}
+                    numSets={0}
+                    numWords={basicDeckData?.words?.length}
+                  />
+                </a>
+              </Link>
+            );
+          })}
       </PracticeGrid>
-      <PracticeList>
+      <PracticeGrid>
         {data &&
           data.length > 0 &&
           data.map((practiceData, index) => {
+            console.log(practiceData);
             return (
-              <>
-                <Link href={`/practice/${practiceData.id}`}>
-                  <a>
-                    <PracticeCard key={`${index}`} data={practiceData} />
-                  </a>
-                </Link>
-                <Divider />
-              </>
+              <Link
+                href={`/practice/${practiceData.id}`}
+                key={`${practiceData.id}`}
+              >
+                <a>
+                  <SetCard
+                    title={practiceData.title}
+                    numSets={0}
+                    numWords={practiceData?.words?.length}
+                  />
+                </a>
+              </Link>
             );
           })}
-      </PracticeList>
+      </PracticeGrid>
     </Container>
   );
 };

@@ -1,150 +1,169 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import Link from 'next/link';
 
+import { useAuthContext } from 'utils/auth';
 import InputField from 'components/Create/InputField';
 import Button from 'components/Button';
 import { distanceProm } from 'utils/DL';
 import getColor from 'theme/getColor';
+import getShadow from 'theme/getShadow';
+import StartView from 'components/Practice/StartView';
+import ProgressView from 'components/Practice/ProgressView';
+import SM2 from 'utils/SM-2';
 
-const ProgressContainer = styled.div`
+const CardContainer = styled.div`
   display: flex;
   flex-direction: column;
-`;
-
-const InputBlock = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-top: 1rem;
-`;
-
-const InputTitle = styled.div`
-  margin-bottom: 0.5rem;
-`;
-
-const StatusMessage = styled.div`
-  display: flex;
-  width: 100%;
-  background-color: ${getColor({ color: 'primary', opacity: 0.24 })};
   border-radius: 1rem;
-  padding: 1rem;
+  background-color: white;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  ${({ alignCenter }) => (alignCenter ? 'align-items: center;' : '')}
+  ${getShadow('MD')}
+`;
+
+const ResultsTable = styled.table`
+  width: 100%;
+  height: 100%;
+`;
+
+const TableCell = styled.td`
+  width: 100%;
+  height: 100%;
 `;
 
 const BasicPractice = () => {
   const [data, setData] = useState(null);
   const [wordsStatus, setWordsStatus] = useState(null);
-  const [currentWordId, setCurrentWordId] = useState(null);
   const [view, setView] = useState('start');
-  const [currGuess, setCurrGuess] = useState('');
-  const [guessClose, setGuessClose] = useState(false);
+
   const router = useRouter();
+
+  const { user } = useAuthContext();
 
   const id = router.query.slug;
 
   const getData = async () => {
-    await axios.get(`/api/cards/${id}`).then((res) => {
-      setData(res.data);
+    await axios
+      .get(`/api/cards/${id}`, { params: { userUid: user.uid } })
+      .then((res) => {
+        setData(res.data);
+        console.log('data: ', res.data);
 
-      const tempWords = {};
-      res.data.words.forEach((word) => {
-        tempWords[word.uid] = {
-          completed: false,
-          fails: 0,
-          description: word.description,
-          translation: word.translation,
-          word: word.word,
-        };
+        const tempWords = {};
+        res.data.words.forEach((word) => {
+          tempWords[word.uid] = {
+            completed: false,
+            repetitionNumber: 0,
+            easiness: 2.5,
+            interval: 0,
+            grade: 0,
+            guesses: [],
+            description: word.description,
+            translation: word.translation,
+            word: word.word,
+          };
+        });
+        setWordsStatus(tempWords);
       });
-      setWordsStatus(tempWords);
-      setCurrentWordId(
-        Object.keys(tempWords)[
-          Math.floor(Math.random() * (Object.keys(tempWords).length - 1))
-        ]
-      );
-    });
   };
 
   useEffect(() => {
-    if (id) {
+    if (id && user) {
       getData();
     }
-  }, [id]);
+  }, [id, user]);
 
-  const handleChange = (evt) => {
-    setCurrGuess(evt.target.value);
-  };
+  console.log('words status: ', wordsStatus);
 
-  const handleGuess = useCallback(async () => {
-    const distanceRating = await distanceProm(
-      wordsStatus[currentWordId].translation.toLowerCase(),
-      currGuess.toLowerCase()
-    );
-    setGuessClose(false);
-    console.log(distanceRating);
-    if (distanceRating === 0) {
-      wordsStatus[currentWordId].completed = true;
-      const keys = Object.keys(wordsStatus);
-      const remainingKeys = [];
-      keys.forEach((key) => {
-        if (wordsStatus[key].completed === false) {
-          remainingKeys.push(key);
-        }
-      });
+  const handleSubmit = useCallback(
+    async (gradedData) => {
+      if (user) {
+        const docData = {
+          gradedData: gradedData,
+          author: {
+            uid: user.uid,
+            displayName: user.displayName,
+          },
+        };
 
-      const newWordId =
-        remainingKeys[Math.floor(Math.random() * (remainingKeys.length - 1))];
-
-      console.log(newWordId);
-
-      if (!newWordId) {
-        setView('success');
+        await axios.post(`/api/results/${id}`, { ...docData });
       }
-      setCurrentWordId(newWordId);
-      setCurrGuess('');
-    } else if (distanceRating === 1) {
-      setGuessClose(true);
-    } else {
-      console.log('wrong! Try again!');
-    }
-  }, [currGuess, currentWordId, wordsStatus]);
+    },
+    [user, id]
+  );
+
+  const gradeWords = useCallback(() => {
+    const gradedWords = {};
+    console.log(Object.entries(wordsStatus));
+    Object.entries(wordsStatus).forEach((word) => {
+      const ID = word[0];
+      const wordData = word[1];
+
+      const result = SM2({
+        grade: wordData.grade,
+        interval: wordData.interval,
+        easiness: wordData.easiness,
+        repetitionNumber: wordData.repetitionNumber,
+      });
+      const nextDate = new Date();
+      nextDate.setDate(nextDate.getDate() + result.interval);
+      nextDate.setHours(12, 0, 0, 0);
+      gradedWords[ID] = { ...result, nextDate: nextDate };
+    });
+    console.log(gradedWords);
+    handleSubmit(gradedWords);
+  }, [wordsStatus, handleSubmit]);
 
   return (
     <div>
-      <h1>Basic practice</h1>
-      {view === 'start' && (
-        <Button onClick={() => setView('progress')}>START</Button>
-      )}
+      <CardContainer>
+        <h1>Basic practice</h1>
+        <h3>
+          Practice set: {wordsStatus && Object.keys(wordsStatus).length} words
+        </h3>
+        {view === 'start' && (
+          <Button onClick={() => setView('progress')}>START</Button>
+        )}
+      </CardContainer>
+      {view === 'start' && <StartView blocks={data?.blocks} />}
       {view === 'progress' && (
-        <ProgressContainer>
-          <p>{data.language01}</p>
-          <h2>{wordsStatus[currentWordId].word}</h2>
-          <InputBlock>
-            <InputTitle>
-              <h3>Translation</h3>
-            </InputTitle>
-            <InputField
-              placeholder='translation'
-              name='translation'
-              onInput={handleChange}
-              customValue={currGuess}
-            />
-          </InputBlock>
-          <Button onClick={() => handleGuess()}>GUESS</Button>
-          {guessClose && (
-            <StatusMessage>
-              <h3>Close! Try again</h3>
-            </StatusMessage>
-          )}
-        </ProgressContainer>
+        <ProgressView
+          data={data}
+          wordsStatus={wordsStatus}
+          setSuccessView={() => {
+            console.log('setting view success');
+            gradeWords();
+            setView('success');
+          }}
+        />
       )}
       {view === 'success' && (
         <>
-          <h1>Good job you are done!</h1>
-          <Link href='/'>
-            <a>Return Home</a>
-          </Link>
+          <CardContainer>
+            <h1>Good job you are done!</h1>
+            <h2>Results: </h2>
+
+            <Link href='/'>
+              <a>Return Home</a>
+            </Link>
+            <Button onClick={() => gradeWords()}>Send save</Button>
+          </CardContainer>
+          <CardContainer>
+            {Object.keys(wordsStatus).map((key) => {
+              return (
+                <ResultsTable key={`row - ${key}`}>
+                  <TableCell>{wordsStatus[key].word}</TableCell>
+                  <TableCell>{wordsStatus[key].translation}</TableCell>
+                  <TableCell>Grade: {wordsStatus[key].grade}</TableCell>
+                  <TableCell>Easiness: {wordsStatus[key].easiness}</TableCell>
+                </ResultsTable>
+              );
+            })}
+          </CardContainer>
         </>
       )}
     </div>

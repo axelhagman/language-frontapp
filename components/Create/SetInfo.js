@@ -2,16 +2,18 @@ import React from 'react';
 import styled from 'styled-components';
 import getColor from 'theme/getColor';
 
+import getShadow from 'theme/getShadow';
 import Button from 'components/Button';
 
-const Container = styled.div`
+const CardContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
-  padding: 1rem;
-  border-radius: 0.5rem;
-  border: 1px solid #eeeeee;
-  margin-top: 2rem;
+  border-radius: 1rem;
+  background-color: white;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  ${({ alignCenter }) => (alignCenter ? 'align-items: center;' : '')}
+  ${getShadow('MD')}
 `;
 
 const HeaderBlock = styled.div``;
@@ -78,14 +80,14 @@ const Removebutton = styled.div`
   }
 `;
 
-const SetInfo = ({ wordsData, basicsData }) => {
+const SetInfo = ({ wordsData, basicsData, removeWord }) => {
   if (!wordsData || !basicsData) {
     return null;
   }
   return (
-    <Container>
+    <CardContainer>
       <HeaderBlock>
-        <h1>{basicsData.title}</h1>
+        <h1>{basicsData.blockTitle}</h1>
         <h2>{basicsData.description}</h2>
       </HeaderBlock>
       <StyledColumns>
@@ -112,13 +114,18 @@ const SetInfo = ({ wordsData, basicsData }) => {
                 <h3>{word.translation}</h3>
               </WordContainer>
               <ButtonsContainer>
-                <Button colorOverride='notificationError'>Remove</Button>
+                <Button
+                  colorOverride='notificationError'
+                  onClick={() => removeWord(word)}
+                >
+                  Remove
+                </Button>
               </ButtonsContainer>
             </WordRow>
           );
         })}
       </StyledColumns>
-    </Container>
+    </CardContainer>
   );
 };
 

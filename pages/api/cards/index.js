@@ -21,7 +21,7 @@ const testRequest = async (req, res) => {
       // );
       // const entries = await getDocs(q);
 
-      const entries = await getDocs(collection(firestore, 'basicCards'));
+      const entries = await getDocs(collection(firestore, 'practiceSets'));
       const entriesData = entries.docs.map((entry) => {
         return { ...entry.data(), id: entry.id };
       });
@@ -33,27 +33,45 @@ const testRequest = async (req, res) => {
     }
   } else if (req.method === 'POST') {
     try {
-      const { title, language01, language02, author, wordsData } = req.body;
+      const { title, language01, language02, author, blockTitle, wordsData } =
+        req.body;
 
       const batch = writeBatch(firestore, 'words');
 
       const wordsIds = [];
+
+      console.log(wordsData);
 
       wordsData.forEach((word) => {
         const newWordRef = doc(collection(firestore, 'words'));
 
         wordsIds.push(newWordRef.id);
 
-        batch.set(newWordRef, { ...word, uid: newWordRef.id });
+        batch.set(newWordRef, {
+          ...word,
+          uid: newWordRef.id,
+          creator: author.uid,
+        });
       });
 
-      const docRef = await addDoc(collection(firestore, 'basicCards'), {
+      const newBlockRef = doc(collection(firestore, 'blocks'));
+
+      batch.set(newBlockRef, {
+        blockTitle,
+        creator: author.uid,
+        language01,
+        language02,
+        uid: newBlockRef.id,
+        words: [...wordsIds],
+      });
+
+      const docRef = await addDoc(collection(firestore, 'practiceSets'), {
         title: title,
         language01,
         language02,
-        authorUid: author.uid,
+        creator: author.uid,
         displayName: author.displayName,
-        words: [...wordsIds],
+        sets: [newBlockRef.id],
       });
 
       batch.commit();

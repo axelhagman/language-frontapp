@@ -12,7 +12,7 @@ const Container = styled.div`
   background-color: ${getColor({ color: 'primary', opacity: 0.36 })};
 `;
 
-const PracticeCard = ({ data }) => {
+const GroupCard = ({ data }) => {
   console.log(data);
   return (
     <Container>
@@ -25,4 +25,4 @@ const PracticeCard = ({ data }) => {
   );
 };
 
-export default PracticeCard;
+export default GroupCard;

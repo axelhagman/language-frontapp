@@ -5,48 +5,13 @@ import axios from 'axios';
 import getColor from 'theme/getColor';
 import { useAuthContext } from 'utils/auth';
 
+import Button from 'components/Button';
 import Basics from 'components/Create/BasicInfoView';
 import AddWord from 'components/Create/AddWord';
 import SetInfo from 'components/Create/SetInfo';
 
 const Container = styled.div`
   padding: 2rem;
-`;
-
-const InfoBlock = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
-
-const Header = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`;
-
-const InputBlock = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-top: 1rem;
-`;
-
-const InputTitle = styled.div`
-  margin-bottom: 0.5rem;
-`;
-
-const NextStepContainer = styled.div`
-  margin-top: 1rem;
-`;
-
-const NextButton = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-  background-color: ${getColor({ color: 'primary' })};
-  width: 100%;
 `;
 
 const ButtonContainer = styled.div`
@@ -65,6 +30,7 @@ const Create = () => {
   const [view, setView] = useState('basics');
   const [basicsData, setBasicsData] = useState({
     title: '',
+    blockTitle: '',
     language01: '',
     language02: '',
     description: '',
@@ -75,6 +41,13 @@ const Create = () => {
 
   const handleAddToWords = (newWord) => {
     setWordsData([...wordsData, newWord]);
+  };
+
+  const handleRemoveWord = (removeWord) => {
+    const tempWordData = wordsData.filter(
+      (wordData) => wordData.word !== removeWord.word
+    );
+    setWordsData(tempWordData);
   };
 
   const handleSubmit = useCallback(async () => {
@@ -118,16 +91,34 @@ const Create = () => {
               basicsData={basicsData}
               addToWords={(newWord) => handleAddToWords(newWord)}
             />
-            <SetInfo wordsData={wordsData} basicsData={basicsData} />
+            <SetInfo
+              wordsData={wordsData}
+              basicsData={basicsData}
+              removeWord={(word) => handleRemoveWord(word)}
+            />
           </>
         );
       case 'confirm':
         return (
           <>
             <SetInfo wordsData={wordsData} basicsData={basicsData} />
-            <NextButton onClick={() => handleSubmit()}>
-              <h2>Confirm</h2>
-            </NextButton>
+            <ButtonContainer>
+              <Button
+                fullWidth
+                colorOverride='notificationError'
+                onClick={() => setView('content')}
+              >
+                Back
+              </Button>
+              <Divider />
+              <Button
+                fullWidth
+                colorOverride='notificationSuccess'
+                onClick={() => handleSubmit()}
+              >
+                Confirm/Save
+              </Button>
+            </ButtonContainer>
           </>
         );
       case 'success':
@@ -149,12 +140,7 @@ const Create = () => {
     }
   }, [view, wordsData, basicsData]);
 
-  return (
-    <Container>
-      <h1>Create new</h1>
-      {getContent()}
-    </Container>
-  );
+  return <Container>{getContent()}</Container>;
 };
 
 export default Create;
