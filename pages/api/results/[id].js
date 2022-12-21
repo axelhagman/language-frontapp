@@ -14,21 +14,34 @@ const result = async (req, res) => {
   const { id } = req.query;
   if (req.method === 'POST') {
     try {
-      const { gradedData, author } = req.body;
-      console.log('user ID: ', author.uid);
+      const { gradedData, user, nextPracticeDate } = req.body;
+      console.log('user ID: ', user.uid);
 
       console.log('Set ID: ', id);
 
       console.log('Graded Data: ', gradedData);
 
-      const document = doc(
-        firestore,
-        `users/${author.uid}/activeDecks`,
-        `${id}`
+      console.log('next practice date: ', nextPracticeDate);
+
+      const document = doc(firestore, `users/${user.uid}/activeDecks`, `${id}`);
+      await setDoc(
+        document,
+        {
+          ...gradedData,
+        },
+        { merge: true }
       );
-      await setDoc(document, {
-        ...gradedData,
-      });
+
+      const userDoc = doc(firestore, `users/${user.uid}`);
+      await setDoc(
+        userDoc,
+        {
+          nextDates: {
+            [id]: nextPracticeDate,
+          },
+        },
+        { merge: true }
+      );
 
       res.status(200);
     } catch (e) {

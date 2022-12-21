@@ -2,24 +2,37 @@ import Button from 'components/Button';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 
-import SM2 from 'utils/SM-2';
+import { useAuthContext } from 'utils/auth';
+
+import NeedsReview from 'components/Overview/NeedsReview';
 
 const AppContainer = styled.div`
   display: flex;
 `;
 
 const Overview = () => {
-  const [dataState, setDataState] = useState({
-    grade: 3,
-    repetitionNumber: 2,
-    easiness: 2.5,
-    interval: 1.3,
-  });
+  const { user, userData } = useAuthContext();
+
+  console.log(user, userData);
+
+  // const getUserWords = async () => {
+  //   await axios.get(`api/words/${user.uid}`).then((res) => {
+  //     console.log(res.data);
+  //   });
+  // };
+
+  // useEffect(() => {
+  //   if (user?.uid) {
+  //     getUserWords();
+  //   }
+  // }, [user]);
 
   return (
     <AppContainer>
       <h1>Overview</h1>
+      <NeedsReview userData={userData} />
     </AppContainer>
   );
 };

@@ -4,6 +4,8 @@ export const hslColors = {
 
   primary02: 'hsl(30, 100%, 42%)',
 
+  primaryDark: 'hsl(229, 36%, 9%)',
+
   base: 'hsl(52, 94%, 94%)',
 
   purple: 'hsl(260, 46%, 60%)',

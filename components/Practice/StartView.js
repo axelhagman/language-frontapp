@@ -12,7 +12,7 @@ const Container = styled.div`
 const CardContainer = styled.div`
   display: flex;
   flex-direction: column;
-  border-radius: 1rem;
+  border-radius: 0 0 1rem 1rem;
   background-color: white;
   padding: 1.5rem;
   margin-bottom: 2rem;
@@ -42,99 +42,6 @@ const GroupContainer = styled.div`
   border-radius: 0.75rem;
   background-color: #f2f2f2;
 `;
-
-const MOCK_WORD_GROUPS = [
-  {
-    title: 'Appliances',
-    words: [
-      {
-        word: 'air conditioner',
-        translation: 'luftkonditionering',
-      },
-      {
-        word: 'radiator',
-        translation: 'element',
-      },
-      {
-        word: 'thermostat',
-        translation: 'termometer',
-      },
-      {
-        word: 'lamp',
-        translation: 'lampa',
-      },
-      {
-        word: 'television',
-        translation: 'tv',
-      },
-      {
-        word: 'sewing machine',
-        translation: 'symaskin',
-      },
-      {
-        word: 'vacuum cleaner',
-        translation: 'dammsugare',
-      },
-      {
-        word: 'iron',
-        translation: 'strykjärn',
-      },
-      {
-        word: 'dish washer',
-        translation: 'diskmaskin',
-      },
-      {
-        word: 'stove',
-        translation: 'stekplatta',
-      },
-    ],
-  },
-  {
-    title: 'Weather',
-    words: [
-      {
-        word: 'air conditioner',
-        translation: 'luftkonditionering',
-      },
-      {
-        word: 'radiator',
-        translation: 'element',
-      },
-      {
-        word: 'thermostat',
-        translation: 'termometer',
-      },
-      {
-        word: 'lamp',
-        translation: 'lampa',
-      },
-      {
-        word: 'television',
-        translation: 'tv',
-      },
-      {
-        word: 'sewing machine',
-        translation: 'symaskin',
-      },
-      {
-        word: 'vacuum cleaner',
-        translation: 'dammsugare',
-      },
-      {
-        word: 'iron',
-        translation: 'strykjärn',
-      },
-      {
-        word: 'dish washer',
-        translation: 'diskmaskin',
-      },
-      {
-        word: 'stove',
-        translation: 'stekplatta',
-      },
-    ],
-  },
-];
 
 const StartView = ({ words, blocks }) => {
   if (!blocks) {

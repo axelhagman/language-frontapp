@@ -13,8 +13,6 @@ const AppContainer = styled.div`
 
 const ContentWrapper = styled.div`
   width: 100%;
-  height: 200vh;
-  padding: 2rem;
 `;
 
 const ZIndexWrapper = styled.div`
@@ -30,9 +28,20 @@ const BackgroundGradient = styled.div`
   width: 100vw;
   height: 100vh;
   z-index: 0;
-  background: linear-gradient(0deg, #f2f1f8 0%, #ffffff 100%);
+  background-color: #0e111e;
 `;
 
+const InnerContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  padding: 2rem;
+  border-radius: 1rem 0 0 1rem;
+  background-color: white;
+`;
+
+//background: linear-gradient(0deg, #f2f1f8 0%, #ffffff 100%);
 const Layout = ({ children }) => {
   return (
     <AuthProvider>
@@ -41,7 +50,7 @@ const Layout = ({ children }) => {
           <Menu />
           <ContentWrapper>
             <TopBar />
-            {children}
+            <InnerContent>{children}</InnerContent>
           </ContentWrapper>
         </ZIndexWrapper>
         <BackgroundGradient />

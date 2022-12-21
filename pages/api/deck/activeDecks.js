@@ -21,16 +21,15 @@ const activeDecks = async (req, res) => {
         query(collection(firestore, `users/${userUid}/activeDecks`))
       );
 
-      const aDDocsIDs = activeDecksDocs.docs.map((entry) => entry.id);
-
-      const entries = await getDocs(collection(firestore, 'practiceSets'));
+      const entries = await getDocs(
+        collection(firestore, 'decks'),
+        where('uid', '')
+      );
       //   console.log(entries);
       const entriesData = {};
       entries.docs.forEach((entry) => {
         entriesData[entry.id] = { ...entry.data() };
       });
-
-      console.log(entriesData);
 
       const activeDecksData = {};
 

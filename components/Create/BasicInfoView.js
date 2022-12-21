@@ -7,10 +7,19 @@ import getShadow from 'theme/getShadow';
 
 import InputField from './InputField';
 
+const TopContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  border-radius: 1rem 1rem 0 0;
+  background-color: #dcddfc;
+  padding: 1.5rem;
+  padding-bottom: 2rem;
+`;
+
 const CardContainer = styled.div`
   display: flex;
   flex-direction: column;
-  border-radius: 1rem;
+  border-radius: 0 0 1rem 1rem;
   background-color: white;
   padding: 1.5rem;
   margin-bottom: 2rem;
@@ -54,12 +63,12 @@ const Basics = ({ onNext, initialData }) => {
 
   return (
     <>
-      <CardContainer>
+      <TopContainer>
         <Header>
           <h1>Create New</h1>
           <h2>Basic Info</h2>
         </Header>
-      </CardContainer>
+      </TopContainer>
       <CardContainer>
         <InputBlock>
           <InputTitle>

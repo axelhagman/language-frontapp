@@ -10,12 +10,33 @@ import { distanceProm } from 'utils/DL';
 const CardContainer = styled.div`
   display: flex;
   flex-direction: column;
-  border-radius: 1rem;
+  border-radius: 0 0 1rem 1rem;
   background-color: white;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-  ${({ alignCenter }) => (alignCenter ? 'align-items: center;' : '')}
   ${getShadow('MD')}
+`;
+
+const ProgressBarContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 0.25rem;
+  background-color: rgba(0, 0, 0, 0.04);
+`;
+
+const ProgressBar = styled.div`
+  display: flex;
+  width: ${({ progress }) => (progress ? `${progress}` : '0')}%;
+  background-color: black;
+  height: 100%;
+  transition: all ease 0.5s;
+`;
+
+const InnerCard = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem;
+  width: 100%;
 `;
 
 const InputBlock = styled.div`
@@ -124,14 +145,7 @@ const CurrentWord = styled.div`
 // Max Grade 5 (Perfect recall)
 // Lowest Grade 0 (Complete failure to recall information)
 const gradeWord = (word) => {
-  let grade = 5;
   const { guesses } = word;
-
-  console.log(word);
-
-  if (guesses.length > 1) {
-    grade = 4.5;
-  }
 
   let totalScore = 0;
   guesses.forEach((score) => {
@@ -149,15 +163,23 @@ const ProgressView = ({ data, wordsStatus, setSuccessView }) => {
   const [failActive, setFailActive] = useState(false);
   const [successActive, setSuccessActive] = useState(false);
   const [currentWordId, setCurrentWordId] = useState(null);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    if (data) {
-      console.log(data);
+    if (wordsStatus && data) {
+      console.log(
+        'Setting initial current word id: ',
+        Object.keys(wordsStatus).length - 1
+      );
       setCurrentWordId(
-        data.words[Math.floor(Math.random() * (data.words.length - 1))].uid
+        Object.keys(wordsStatus)[
+          Math.floor(Math.random() * (Object.keys(wordsStatus).length - 1))
+        ]
       );
     }
-  }, [data]);
+  }, [data, wordsStatus]);
+
+  console.log(wordsStatus[currentWordId]);
 
   const handleChange = (evt) => {
     setCurrGuess(evt.target.value);
@@ -180,6 +202,11 @@ const ProgressView = ({ data, wordsStatus, setSuccessView }) => {
     });
 
     console.log('remaining keys: ', remainingKeys);
+
+    setProgress(
+      (Object.keys(wordsStatus).length - remainingKeys.length) /
+        Object.keys(wordsStatus).length
+    );
 
     let newWordId = null;
     if (remainingKeys.length > 1) {
@@ -216,14 +243,15 @@ const ProgressView = ({ data, wordsStatus, setSuccessView }) => {
     } else {
       // Wrong guess
       wordsStatus[currentWordId].guesses.push(distanceRating);
-      setFailActive(true);
-      setTimeout(() => {
-        setFailActive(false);
-        setCurrGuess('');
-        setCurrentWordId(newWordId);
-      }, 450);
+      setFailActive(newWordId);
     }
   }, [currGuess, currentWordId, wordsStatus]);
+
+  const handleContinue = useCallback(() => {
+    setCurrentWordId(failActive);
+    setCurrGuess('');
+    setFailActive(false);
+  }, [failActive]);
 
   const getAnimClassName = useCallback(() => {
     if (failActive) {
@@ -237,43 +265,67 @@ const ProgressView = ({ data, wordsStatus, setSuccessView }) => {
 
   const handleKeyDown = (evt) => {
     if (evt.key === 'Enter') {
-      handleGuess();
+      if (failActive) {
+        handleContinue();
+      } else {
+        handleGuess();
+      }
     }
   };
 
   return (
     <CardContainer alignCenter>
-      <WordAnimationContainer>
-        {currentWordId && (
-          <CurrentWord className={getAnimClassName()} guessFailed={failActive}>
-            <h2>{wordsStatus[currentWordId].word}</h2>
-            <p>{wordsStatus[currentWordId].translation}</p>
-          </CurrentWord>
+      <ProgressBarContainer>
+        <ProgressBar progress={progress * 100} />
+      </ProgressBarContainer>
+      <InnerCard>
+        <WordAnimationContainer>
+          {currentWordId && (
+            <CurrentWord
+              className={getAnimClassName()}
+              guessFailed={failActive}
+            >
+              <h2>{wordsStatus[currentWordId].word}</h2>
+            </CurrentWord>
+          )}
+        </WordAnimationContainer>
+        <InputBlock>
+          <InputField
+            placeholder='translation'
+            name='translation'
+            onInput={handleChange}
+            onKeyDown={handleKeyDown}
+            customValue={currGuess}
+          />
+        </InputBlock>
+        {failActive && (
+          <p>Correct answer: {wordsStatus[currentWordId].translation}</p>
         )}
-      </WordAnimationContainer>
-      <InputBlock>
-        <InputField
-          placeholder='translation'
-          name='translation'
-          onInput={handleChange}
-          onKeyDown={handleKeyDown}
-          customValue={currGuess}
-        />
-      </InputBlock>
-      <ButtonBlock>
-        <Button
-          colorOverride='notificationSuccess'
-          fullWidth
-          onClick={() => handleGuess()}
-        >
-          GUESS
-        </Button>
-      </ButtonBlock>
-      {guessClose && (
-        <StatusMessage>
-          <h3>Close! Try again</h3>
-        </StatusMessage>
-      )}
+        <ButtonBlock>
+          {failActive ? (
+            <Button
+              colorOverride='notificationSuccess'
+              fullWidth
+              onClick={() => handleContinue()}
+            >
+              NEXT
+            </Button>
+          ) : (
+            <Button
+              colorOverride='notificationSuccess'
+              fullWidth
+              onClick={() => handleGuess()}
+            >
+              GUESS
+            </Button>
+          )}
+        </ButtonBlock>
+        {guessClose && (
+          <StatusMessage>
+            <h3>Close! Try again</h3>
+          </StatusMessage>
+        )}
+      </InnerCard>
     </CardContainer>
   );
 };

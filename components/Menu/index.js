@@ -18,6 +18,7 @@ const Container = styled.div`
   position: sticky;
   top: 0;
   padding: 2rem;
+  padding-top: 1rem;
   min-width: 15rem;
   border-right: 1px solid rgba(0, 0, 0, 0.12);
 `;
@@ -92,7 +93,7 @@ const Menu = () => {
   return (
     <Container>
       <HeaderBlock>
-        <h1>Lingu</h1>
+        <h1 style={{ color: 'white' }}>Spraba</h1>
       </HeaderBlock>
       <MainOptions>
         <Link href='/'>
@@ -116,9 +117,9 @@ const Menu = () => {
 
       <BottomContent>
         {user ? (
-          <MenuOption onClick={logout} title='Log out' />
+          <MenuOption hasIcon={false} onClick={logout} title='Log out' />
         ) : (
-          <MenuOption onClick={login} title='Log In' />
+          <MenuOption hasIcon={false} onClick={login} title='Log In' />
         )}
         <Divider />
         {/* <BottomCard /> */}

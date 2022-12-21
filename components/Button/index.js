@@ -8,16 +8,16 @@ const StyledButton = styled.button`
   justify-content: center;
   width: ${({ fullWidth }) => (fullWidth ? '100%' : 'fit-content')};
   align-items: center;
-  padding: 0.75rem 1.25rem;
+  padding: 0.75rem 2rem;
   margin: 0;
   background-color: ${({ colorOverride, fullOpacity }) =>
     colorOverride
       ? getColor({ color: colorOverride, opacity: fullOpacity ? 0.36 : 0.72 })
       : getColor({
-          color: 'primary',
-          opacity: fullOpacity ? 0.36 : 0.72,
+          color: 'primaryDark',
+          opacity: 1,
         })};
-  border-radius: 1rem;
+  border-radius: 0.5rem;
   border: 0;
   cursor: pointer;
   transition: all ease 0.25s;
@@ -26,8 +26,8 @@ const StyledButton = styled.button`
       colorOverride
         ? getColor({ color: colorOverride, opacity: fullOpacity ? 0.52 : 1 })
         : getColor({
-            color: 'primary',
-            opacity: fullOpacity ? 0.52 : 1,
+            color: 'primaryDark',
+            opacity: 0.8,
           })};
   }
   > * {
@@ -57,7 +57,9 @@ const Button = ({
       colorOverride={colorOverride}
       fullOpacity={fullOpacity}
     >
-      <p style={{ fontSize: 16, fontWeight: 'bold' }}>{children}</p>
+      <p style={{ fontSize: 14, color: 'white', fontWeight: 'regular' }}>
+        {children}
+      </p>
     </StyledButton>
   );
 };

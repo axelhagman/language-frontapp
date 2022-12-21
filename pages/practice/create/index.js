@@ -1,8 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 
-import getColor from 'theme/getColor';
 import { useAuthContext } from 'utils/auth';
 
 import Button from 'components/Button';
@@ -10,9 +10,7 @@ import Basics from 'components/Create/BasicInfoView';
 import AddWord from 'components/Create/AddWord';
 import SetInfo from 'components/Create/SetInfo';
 
-const Container = styled.div`
-  padding: 2rem;
-`;
+const Container = styled.div``;
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -37,6 +35,8 @@ const Create = () => {
   });
   const [wordsData, setWordsData] = useState([]);
 
+  const router = useRouter();
+
   const { user } = useAuthContext();
 
   const handleAddToWords = (newWord) => {
@@ -44,9 +44,11 @@ const Create = () => {
   };
 
   const handleRemoveWord = (removeWord) => {
+    console.log(wordsData, removeWord);
     const tempWordData = wordsData.filter(
-      (wordData) => wordData.word !== removeWord.word
+      (wordData) => wordData !== removeWord
     );
+    console.log(tempWordData);
     setWordsData(tempWordData);
   };
 
@@ -61,7 +63,11 @@ const Create = () => {
         },
       };
 
-      await axios.post('/api/cards', { ...docData });
+      await axios.post('/api/deck/create', { ...docData }).then((resp) => {
+        if (resp.status === 200) {
+          router.push('/practice');
+        }
+      });
     }
   }, [user, wordsData, basicsData]);
 

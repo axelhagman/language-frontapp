@@ -18,20 +18,22 @@ const chunkArray = (list, chunk) => {
   return result;
 };
 
-const testRequest = async (req, res) => {
+const getDeck = async (req, res) => {
   const { id } = req.query;
   if (req.method === 'GET') {
     try {
       const { userUid } = req.query;
-      const docRef = doc(firestore, `practiceSets/${id}`);
+      const docRef = doc(firestore, `decks/${id}`);
       const document = await getDoc(docRef);
 
       console.log(userUid);
 
+      console.log(document.data());
+
       const blockDocs = await getDocs(
         query(
           collection(firestore, 'blocks'),
-          where('uid', 'in', document.data().sets)
+          where('uid', 'in', document.data().blocks)
         )
       );
 
@@ -49,11 +51,15 @@ const testRequest = async (req, res) => {
         query(doc(firestore, `users/${userUid}/activeDecks/${id}`))
       );
 
-      console.log(activeDeckDoc);
+      let userDeckData = null;
+      if (activeDeckDoc.exists()) {
+        console.log('Active Deckdoc: ', activeDeckDoc);
+        userDeckData = Object.keys(activeDeckDoc.data()).map((key) => {
+          return { id: key, ...activeDeckDoc.data()[key] };
+        });
+      }
 
-      const userDeckData = Object.keys(activeDeckDoc.data()).map((key) => {
-        return { id: key, ...activeDeckDoc.data()[key] };
-      });
+      console.log('Chunks: ', chunks);
 
       for (let i = 0; i < chunks.length; i++) {
         const chunkDocs = await getDocs(
@@ -61,8 +67,6 @@ const testRequest = async (req, res) => {
         );
         wordsData.push(...chunkDocs.docs.map((doc) => doc.data()));
       }
-
-      // const userGradedData = await getDoc(doc(firestore, `users/`));
 
       res.status(200).json({
         ...document.data(),
@@ -77,4 +81,4 @@ const testRequest = async (req, res) => {
   }
 };
 
-export default testRequest;
+export default getDeck;

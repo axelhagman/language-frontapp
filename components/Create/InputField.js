@@ -21,13 +21,21 @@ const StyledInput = styled.input`
   }
 `;
 
-const InputField = ({ onInput, customValue, name, placeholder, onKeyDown }) => {
+const InputField = ({
+  onInput,
+  customValue,
+  name,
+  placeholder,
+  onKeyDown,
+  inputFieldId,
+}) => {
   return (
     <Container>
       <StyledInput
         onInput={onInput}
         value={customValue}
         name={name}
+        id={inputFieldId || null}
         autoComplete='off'
         placeholder={placeholder}
         onKeyDown={onKeyDown}

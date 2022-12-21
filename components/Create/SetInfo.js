@@ -8,15 +8,27 @@ import Button from 'components/Button';
 const CardContainer = styled.div`
   display: flex;
   flex-direction: column;
-  border-radius: 1rem;
+  ${({ noBlock }) =>
+    noBlock
+      ? ``
+      : `border-radius: 1rem;
   background-color: white;
   padding: 1.5rem;
   margin-bottom: 2rem;
   ${({ alignCenter }) => (alignCenter ? 'align-items: center;' : '')}
-  ${getShadow('MD')}
+  ${getShadow('MD')}`}
 `;
 
-const HeaderBlock = styled.div``;
+const HeaderBlock = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+const Column = styled.div`
+  dispay: flex;
+  flex-direction: column;
+  margin-right: auto;
+`;
 
 const StyledColumns = styled.div`
   display: flex;
@@ -37,7 +49,7 @@ const LanguageContainer = styled.div`
   min-width: 40%;
 `;
 
-const LagnuageTag = styled.div`
+const Tag = styled.div`
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
   background-color: #eeeeee;
@@ -66,6 +78,7 @@ const ButtonsContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
   width: 20%;
 `;
 
@@ -80,38 +93,43 @@ const Removebutton = styled.div`
   }
 `;
 
-const SetInfo = ({ wordsData, basicsData, removeWord }) => {
+const SetInfo = ({ wordsData, basicsData, removeWord, noBlock }) => {
   if (!wordsData || !basicsData) {
     return null;
   }
   return (
-    <CardContainer>
+    <CardContainer noBlock={noBlock}>
       <HeaderBlock>
-        <h1>{basicsData.blockTitle}</h1>
-        <h2>{basicsData.description}</h2>
+        <Column>
+          <h1>{basicsData.blockTitle}</h1>
+          <h2>{basicsData.description}</h2>
+        </Column>
+        <Tag>
+          <h2>Words: {wordsData.length}</h2>
+        </Tag>
       </HeaderBlock>
       <StyledColumns>
         <TableHeader>
           <LanguageContainer>
-            <LagnuageTag>
+            <Tag>
               <h2>{basicsData.language01}</h2>
-            </LagnuageTag>
+            </Tag>
           </LanguageContainer>
           <LanguageContainer>
-            <LagnuageTag>
+            <Tag>
               <h2>{basicsData.language02}</h2>
-            </LagnuageTag>
+            </Tag>
           </LanguageContainer>
           <Empty />
         </TableHeader>
         {wordsData.map((word, index) => {
           return (
-            <WordRow key={`word-${word.word}-${index}`}>
+            <WordRow key={`word-${word.language01}-${index}`}>
               <WordContainer>
-                <h3>{word.word}</h3>
+                <h3>{word.language01}</h3>
               </WordContainer>
               <WordContainer>
-                <h3>{word.translation}</h3>
+                <h3>{word.language02}</h3>
               </WordContainer>
               <ButtonsContainer>
                 <Button
@@ -120,6 +138,9 @@ const SetInfo = ({ wordsData, basicsData, removeWord }) => {
                 >
                   Remove
                 </Button>
+                <Tag>
+                  <h3>{index + 1}</h3>
+                </Tag>
               </ButtonsContainer>
             </WordRow>
           );

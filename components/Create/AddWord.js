@@ -7,10 +7,19 @@ import getShadow from 'theme/getShadow';
 
 import InputField from './InputField';
 
+const TopContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  border-radius: 1rem 1rem 0 0;
+  background-color: #dcddfc;
+  padding: 1.5rem;
+  padding-bottom: 2rem;
+`;
+
 const CardContainer = styled.div`
   display: flex;
   flex-direction: column;
-  border-radius: 1rem;
+  border-radius: 0 0 1rem 1rem;
   background-color: white;
   padding: 1.5rem;
   margin-bottom: 2rem;
@@ -57,13 +66,25 @@ const Divider = styled.div`
 
 const AddWord = ({ onBack, addToWords, onNext, basicsData }) => {
   const [currWord, setCurrWord] = useState({
-    word: '',
-    translation: '',
+    language01: '',
+    language02: '',
     description: '',
   });
 
   const handleChange = (evt) => {
     setCurrWord({ ...currWord, [evt.target.name]: evt.target.value });
+  };
+
+  const handleKeyDown = (evt) => {
+    if (evt.key === 'Enter') {
+      addToWords(currWord);
+      setCurrWord({
+        language01: '',
+        language02: '',
+        description: '',
+      });
+      document.getElementById('first_field').focus();
+    }
   };
 
   if (!basicsData) {
@@ -72,12 +93,12 @@ const AddWord = ({ onBack, addToWords, onNext, basicsData }) => {
 
   return (
     <>
-      <CardContainer>
+      <TopContainer>
         <Header>
           <h1>{basicsData.title}</h1>
           <h2>Add new word</h2>
         </Header>
-      </CardContainer>
+      </TopContainer>
       <CardContainer>
         <InfoBlock>
           <InputBlock>
@@ -86,9 +107,11 @@ const AddWord = ({ onBack, addToWords, onNext, basicsData }) => {
             </InputTitle>
             <InputField
               placeholder='Word'
-              name='word'
+              name='language01'
+              inputFieldId='first_field'
               onInput={handleChange}
-              customValue={currWord.word}
+              onKeyDown={handleKeyDown}
+              customValue={currWord.language01}
             />
           </InputBlock>
           <InputBlock>
@@ -97,9 +120,10 @@ const AddWord = ({ onBack, addToWords, onNext, basicsData }) => {
             </InputTitle>
             <InputField
               placeholder='Translation'
-              name='translation'
+              name='language02'
               onInput={handleChange}
-              customValue={currWord.translation}
+              onKeyDown={handleKeyDown}
+              customValue={currWord.language02}
             />
           </InputBlock>
           <InputBlock>
@@ -110,6 +134,7 @@ const AddWord = ({ onBack, addToWords, onNext, basicsData }) => {
               placeholder='Description'
               name='description'
               onInput={handleChange}
+              onKeyDown={handleKeyDown}
               customValue={currWord.description}
             />
           </InputBlock>
@@ -121,8 +146,8 @@ const AddWord = ({ onBack, addToWords, onNext, basicsData }) => {
             onClick={() => {
               addToWords(currWord);
               setCurrWord({
-                word: '',
-                translation: '',
+                language01: '',
+                language02: '',
                 description: '',
               });
             }}
